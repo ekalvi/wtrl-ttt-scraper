@@ -1,0 +1,20 @@
+{
+  "club_name": "Waterloo Cycling Club (WCC)",
+  "wtrl_sid": "your_sid_here",
+  "wtrl_ouid": "your_ouid_here",
+  "ctoken": "your_ctoken_here",
+  "teams": [
+    {
+      "team_name": "Waterloo Ones",
+      "aliases": [
+        "WCC Butter Tarts"
+      ]
+    },
+    {
+      "team_name": "Waterloo Threes",
+      "aliases": [
+        "WCC Coureur des Bois"
+      ]
+    }
+  ]
+}
