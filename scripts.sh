@@ -6,7 +6,7 @@ curl 'https://www.wtrl.racing/api/wtrlruby/?wtrlid=ttt&season=299&action=results
   -H 'access-control-allow-origin: https://www.wtrl.racing' \
   -H 'authorization: Bearer undefined' \
   -H 'cache-control: no-cache' \
-  -H 'cookie: _ga=GA1.1.141107064.1725975784; wtrl_sid=17b9737371b210378ff234daf2161ecd; wtrl_ouid=eyJpYXQiOjE3MzY5NjMwMzIsImVhdCI6MTczOTU1NTAzMiwicHJvZmlsZV9waWMiOiJodHRwczpcL1wvd3d3Lnd0cmwucmFjaW5nXC91cGxvYWRzXC9wcm9maWxlX3BpY3R1cmVcLzE2NTg0NDYyMThfZXJpay5qcGVnIiwiZmlyc3RfbmFtZSI6IkVyaWsiLCJsYXN0X25hbWUiOiJLYWx2aWFpbmVuIiwiZW1haWwiOiJla2FsdmlAZ21haWwuY29tIiwidXNlckNsYXNzIjoiMSIsInp3aWZ0SWQiOiI0MDk3MTkwIiwidXNlcklkIjoiNDM3OTAiLCJjb3VudHJ5X2lkIjoiMTI0IiwiZ2VuZGVyIjoiTWFsZSIsInJhY2VUZWFtIjoiMCJ9.17b9737371b210378ff234daf2161ecd; _ga_SL0YM0MYT3=GS1.1.1736965493.37.1.1736965583.0.0.0' \
+  -H 'cookie: _ga=GA1.1.141107064.1725975784; wtrl_sid=xxx; wtrl_ouid=xxx; _ga_SL0YM0MYT3=GS1.1.1736965493.37.1.1736965583.0.0.0' \
   -H 'pragma: no-cache' \
   -H 'priority: u=1, i' \
   -H 'referer: https://www.wtrl.racing/ttt-results/' \
@@ -18,29 +18,5 @@ curl 'https://www.wtrl.racing/api/wtrlruby/?wtrlid=ttt&season=299&action=results
   -H 'sec-fetch-site: same-origin' \
   -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36' \
   -H 'wtrl-api-version: 2.7' \
-  -H 'wtrl-integrity: 21c1c0a3811da7f7e8d6dcb44b498173651727979f3fed893b9273a41d9025f717f6d7' \
-  -H 'x-requested-with: XMLHttpRequest'
-
-
-curl 'https://www.wtrl.racing/api/wtrlruby/?wtrlid=ttt&season=299&action=results&_=1737058558875' \
-  -H 'accept: application/json, text/javascript, */*; q=0.01' \
-  -H 'accept-language: en-US,en;q=0.9' \
-  -H 'access-control-allow-credentials: true' \
-  -H 'access-control-allow-headers: Accept' \
-  -H 'access-control-allow-origin: https://www.wtrl.racing' \
-  -H 'authorization: Bearer undefined' \
-  -H 'cache-control: no-cache' \
-  -H 'cookie: wtrl_sid=df9004e2f3abec88775084b3e1db885a; _ga=GA1.1.1356331536.1737058512; wtrl_ouid=eyJpYXQiOjE3MzcwNTg1MjgsImVhdCI6MTczOTY1MDUyOCwicHJvZmlsZV9waWMiOiJodHRwczpcL1wvd3d3Lnd0cmwucmFjaW5nXC91cGxvYWRzXC9wcm9maWxlX3BpY3R1cmVcLzE2NTg0NDYyMThfZXJpay5qcGVnIiwiZmlyc3RfbmFtZSI6IkVyaWsiLCJsYXN0X25hbWUiOiJLYWx2aWFpbmVuIiwiZW1haWwiOiJla2FsdmlAZ21haWwuY29tIiwidXNlckNsYXNzIjoiMSIsInp3aWZ0SWQiOiI0MDk3MTkwIiwidXNlcklkIjoiNDM3OTAiLCJjb3VudHJ5X2lkIjoiMTI0IiwiZ2VuZGVyIjoiTWFsZSIsInJhY2VUZWFtIjoiMCJ9.df9004e2f3abec88775084b3e1db885a; _ga_SL0YM0MYT3=GS1.1.1737058512.1.1.1737058558.0.0.0' \
-  -H 'pragma: no-cache' \
-  -H 'priority: u=1, i' \
-  -H 'referer: https://www.wtrl.racing/ttt/TTT-Results-beta.php' \
-  -H 'sec-ch-ua: "Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"' \
-  -H 'sec-ch-ua-mobile: ?0' \
-  -H 'sec-ch-ua-platform: "macOS"' \
-  -H 'sec-fetch-dest: empty' \
-  -H 'sec-fetch-mode: cors' \
-  -H 'sec-fetch-site: same-origin' \
-  -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36' \
-  -H 'wtrl-api-version: 2.7' \
-  -H 'wtrl-integrity: bbc245e10dc79341481a0b6577c7e81fffd7b191225602d35182b409f91c8fe668137d' \
+  -H 'wtrl-integrity: xxx' \
   -H 'x-requested-with: XMLHttpRequest'
