@@ -61,14 +61,21 @@ The **WTRL TTT Scraper** is a Python-based project designed to scrape, process, 
 ```
 WTRL-TTT-Scraper/
 ├── cache/                   # Contains cached race results in JSON format
-├── config.json              # Template configuration file
-├── config.secret.json       # User-filled configuration file (not tracked in Git)
-├── main.py                  # Main script to scrape and process data
-├── models.py                # Data models for teams, riders, and results
-├── parse.py                 # Functions for parsing WTRL API responses
-├── format.py                # Utility functions for formatting and calculations
-├── results/                 # Generated HTML files (team dashboards and index)
-└── README.md                # Documentation (this file)
+├── results/                 # Contains generated HTML files for dashboards and index
+├── wtrl/                    # Core package for the scraper
+│   ├── __init__.py          # Package init
+│   ├── scrape.py            # Scraping logic
+│   ├── render.py            # HTML rendering
+│   ├── models.py            # Data models
+│   ├── format.py            # Formatting utilities
+│   ├── parse.py             # Parsing utilities
+│   ├── calculate.py         # Calculations (e.g., percentiles)
+├── main.py                  # Entry point for the scraper
+├── config.py            # Configuration logic
+├── requirements.txt         # Python dependencies
+├── README.md                # Documentation
+├── LICENSE.md               # License file
+└── scripts.sh               # Utility scripts for automation
 ```
 
 ---
