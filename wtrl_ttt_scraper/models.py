@@ -2,7 +2,7 @@ import re
 from dataclasses import dataclass
 from typing import List, Optional
 
-from format import format_time
+from wtrl_ttt_scraper.format import format_time
 
 
 @dataclass

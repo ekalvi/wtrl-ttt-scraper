@@ -4,14 +4,16 @@ import plotly.graph_objects as go
 import pandas as pd
 import os
 
+from config import RESULTS_DIR
 from config import Config
-from format import slugify
+from wtrl_ttt_scraper.format import slugify
 
 HTML_HEAD = """
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>WTRL TTT Results</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏁</text></svg>">
         <!-- Tailwind CSS -->
         <script src="https://cdn.tailwindcss.com"></script>
         <!-- DataTables CSS -->
@@ -119,8 +121,7 @@ def generate_index_html(teams: List[str]):
     Args:
         teams List[str]: The list of teams tracked
     """
-    output_dir = "results"
-    os.makedirs(output_dir, exist_ok=True)
+    os.makedirs(RESULTS_DIR, exist_ok=True)
     config = Config.load()
 
     # Start building the index.html content
@@ -149,15 +150,14 @@ def generate_index_html(teams: List[str]):
     """
 
     # Write the index.html file to the output directory
-    with open(os.path.join(output_dir, "index.html"), "w") as index_file:
+    with open(os.path.join(RESULTS_DIR, "index.html"), "w") as index_file:
         index_file.write(index_content)
 
     print("index.html generated successfully.")
 
 
 def render_results(summary_stats: list, team: str):
-    output_dir = "results"
-    os.makedirs(output_dir, exist_ok=True)
+    os.makedirs(RESULTS_DIR, exist_ok=True)
 
     # Convert summary stats to a DataFrame
     df = pd.DataFrame(summary_stats)
@@ -194,7 +194,7 @@ def render_results(summary_stats: list, team: str):
 
     # Save the dashboard to an HTML file
     filename = slugify(team)
-    with open(f"{output_dir}/{filename}.html", "w") as f:
+    with open(f"{RESULTS_DIR}/{filename}.html", "w") as f:
         f.write(dashboard_html)
 
     print(f"Results saved as {filename}.html")

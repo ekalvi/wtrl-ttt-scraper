@@ -1,4 +1,4 @@
-from models import Rider, Team
+from wtrl_ttt_scraper.models import Rider, Team
 
 Team(
     riders=[

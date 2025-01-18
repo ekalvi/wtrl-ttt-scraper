@@ -1,13 +1,11 @@
 import time
 
-from calculate import calculate_percentile, latest_race, race_to_date
+from wtrl_ttt_scraper.calculate import calculate_percentile, latest_race, race_to_date
 from config import Config
-from render import render_results, generate_index_html
-from scrape import scrape_race
-from format import iso_8601_format
+from wtrl_ttt_scraper.render import render_results, generate_index_html
+from wtrl_ttt_scraper.scrape import scrape_race
+from wtrl_ttt_scraper.format import iso_8601_format
 
-
-# Scrape multiple seasons and filter results
 
 if __name__ == "__main__":
     try:

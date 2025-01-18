@@ -4,9 +4,10 @@ from typing import Optional
 import requests
 import os
 
+from config import CACHE_DIR
 from config import Config
-from models import WTRLResult
-from parse import parse_wtrl_result
+from wtrl_ttt_scraper.models import WTRLResult
+from wtrl_ttt_scraper.parse import parse_wtrl_result
 
 # Base URL for scraping
 url_template = (
@@ -57,10 +58,9 @@ def scrape_race(
         bool: True if data read from cache
     """
     # Directory to save results
-    cache_dir = "cache"
     filename = f"race_{race_number}.json"
-    os.makedirs(cache_dir, exist_ok=True)
-    output_file = os.path.join(cache_dir, filename)
+    os.makedirs(CACHE_DIR, exist_ok=True)
+    output_file = os.path.join(CACHE_DIR, filename)
 
     # Check if the file exists locally
     if not refresh_cache and os.path.exists(output_file):

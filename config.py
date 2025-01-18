@@ -1,6 +1,11 @@
 from dataclasses import dataclass, field
 from typing import List
 import json
+import os
+
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))  # Root directory of the project
+CACHE_DIR = os.path.join(BASE_DIR, "cache")
+RESULTS_DIR = os.path.join(BASE_DIR, "results")
 
 
 @dataclass

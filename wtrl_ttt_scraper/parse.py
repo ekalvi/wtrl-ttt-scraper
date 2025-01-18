@@ -1,7 +1,7 @@
 import json
 from typing import Optional
 
-from models import Rider, Team, WTRLResult
+from wtrl_ttt_scraper.models import Rider, Team, WTRLResult
 
 
 # Helper function to parse riders
