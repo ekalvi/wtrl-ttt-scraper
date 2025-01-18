@@ -183,7 +183,9 @@ def render_results(summary_stats: list, team: str):
         </div>
         <script>
             $(document).ready(function() {{
-                $('#sortable_table').DataTable();
+                $('#sortable_table').DataTable({{
+                    order: [[0, 'desc']], // Sort Race # column in descending order
+                }});
             }});
         </script>
     </body>

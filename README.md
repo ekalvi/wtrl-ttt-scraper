@@ -90,6 +90,12 @@ WTRL-TTT-Scraper/
 - Host the `results/` directory on a static hosting service:
   - [Netlify](https://www.netlify.com/): Drag and drop the `results/` folder into Netlify’s interface.
   - [GitHub Pages](https://pages.github.com/): Push the `results/` directory to a GitHub repository and enable GitHub Pages.
+  
+### 4. Format COde
+- Ensure Python code is formatted using [Black](https://black.readthedocs.io/en/latest/)
+  ```bash
+  black .
+  ```
 
 ---
 
