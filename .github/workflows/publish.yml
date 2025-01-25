@@ -1,0 +1,25 @@
+on:
+  workflow_dispatch:
+    inputs:
+      param1:
+        description: "First parameter"
+        required: true
+        default: "default-value"
+
+jobs:
+  run-python:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Run Python Script
+        env:
+          PARAM1: ${{ github.event.inputs.param1 }}
+        run: python main.py --param "$PARAM1"
