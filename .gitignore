@@ -2,3 +2,4 @@ config.secret.json
 results/
 __pycache__/
 .idea/
+.DS_Store

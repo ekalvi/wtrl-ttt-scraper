@@ -45,3 +45,30 @@ class Config:
                 for team in data["teams"]
             ],
         )
+
+    @staticmethod
+    def save_credentials(new_credentials: dict, file_path: str = "config.secret.json"):
+        try:
+            # Load the current configuration
+            with open(file_path, "r") as file:
+                config = json.load(file)
+
+            # Update the credentials
+            config["wtrl_sid"] = new_credentials.get("wtrl_sid", config.get("wtrl_sid"))
+            config["wtrl_ouid"] = new_credentials.get(
+                "wtrl_ouid", config.get("wtrl_ouid")
+            )
+            config["ctoken"] = new_credentials.get("ctoken", config.get("ctoken"))
+
+            # Save the updated configuration
+            with open(file_path, "w") as file:
+                json.dump(config, file, indent=4)
+
+            print("config.secret.json has been updated successfully.")
+
+        except FileNotFoundError:
+            print(f"{file_path} not found. Ensure the file exists.")
+        except json.JSONDecodeError:
+            print(f"Error decoding JSON in {file_path}. Verify the file's format.")
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")

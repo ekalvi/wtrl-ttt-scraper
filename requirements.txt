@@ -3,3 +3,4 @@ tabulate
 pandas
 plotly
 black
+selenium

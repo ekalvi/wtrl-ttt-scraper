@@ -3,7 +3,11 @@ import time
 from wtrl_ttt_scraper.calculate import calculate_percentile, latest_race, race_to_date
 from config import Config
 from wtrl_ttt_scraper.render import render_results, generate_index_html
-from wtrl_ttt_scraper.scrape import scrape_race
+from wtrl_ttt_scraper.scrape import (
+    scrape_race,
+    is_authenticated,
+    get_authentication_credentials,
+)
 from wtrl_ttt_scraper.format import iso_8601_format
 
 
@@ -15,6 +19,13 @@ if __name__ == "__main__":
         raise f"Error: Configuration file not found."
     except KeyError as e:
         raise f"Error: Missing key in configuration file: {e}"
+
+    if not is_authenticated():
+        # we need to update the credentials
+        # credentials = get_authentication_credentials()
+        # Config.save_credentials(credentials)
+        # assert is_authenticated()
+        pass
 
     latest = latest_race()
     summary_stats = {}
