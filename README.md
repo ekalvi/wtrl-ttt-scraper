@@ -53,7 +53,8 @@ The results are found here (requires a WTRL account): https://www.wtrl.racing/tt
   ```
 
 ### 3. Extract Required Tokens
-- Use your browser’s **Developer Tools** to extract the required values:
+- By running `main.py` a browser will open up and you will login to the website and the tokens will automatically be extracted and inserted into the secrets file
+- [Optional] Use your browser’s **Developer Tools** to extract the required values:
   - **`wtrl_sid`** and **`wtrl_ouid`**: Found under `Application > Cookies > https://www.wtrl.racing`.
   - **`ctoken`**: Found under `Application > Session Storage > https://www.wtrl.racing`. This will need to be refreshed after being signed out.
 

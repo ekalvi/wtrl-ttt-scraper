@@ -46,7 +46,7 @@ def main_scraper_logic(config):
     if not is_authenticated():
         # we need to update the credentials
         credentials = get_authentication_credentials()
-        Config.save_credentials(credentials)
+        config = config.save_credentials(credentials)
         assert is_authenticated()
 
     latest = latest_race()

@@ -24,6 +24,7 @@ class Config:
     wtrl_ouid: str
     ctoken: str
     teams: List[TeamConfig] = field(default_factory=list)
+    file_path: str = None
 
     @property
     def club_results_dir(self) -> str:
@@ -53,6 +54,7 @@ class Config:
                 TeamConfig(team_name=team["team_name"], aliases=team["aliases"])
                 for team in data["teams"]
             ],
+            file_path=file_path,
         )
         return Config.get()
 
@@ -69,11 +71,10 @@ class Config:
 
         return CONFIG
 
-    @staticmethod
-    def save_credentials(new_credentials: dict, file_path: str = "config.secret.json"):
+    def save_credentials(self, new_credentials: dict) -> "Config":
         try:
             # Load the current configuration
-            with open(file_path, "r") as file:
+            with open(self.file_path, "r") as file:
                 config = json.load(file)
 
             # Update the credentials
@@ -84,14 +85,17 @@ class Config:
             config["ctoken"] = new_credentials.get("ctoken", config.get("ctoken"))
 
             # Save the updated configuration
-            with open(file_path, "w") as file:
+            with open(self.file_path, "w") as file:
                 json.dump(config, file, indent=4)
 
-            print("config.secret.json has been updated successfully.")
+            print(f"{self.file_path} has been updated successfully.")
+
+            # reload the config
+            return Config.load(self.file_path)
 
         except FileNotFoundError:
-            print(f"{file_path} not found. Ensure the file exists.")
+            print(f"{self.file_path} not found. Ensure the file exists.")
         except json.JSONDecodeError:
-            print(f"Error decoding JSON in {file_path}. Verify the file's format.")
+            print(f"Error decoding JSON in {self.file_path}. Verify the file's format.")
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
