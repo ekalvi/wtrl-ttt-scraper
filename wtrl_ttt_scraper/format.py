@@ -62,3 +62,10 @@ def iso_8601_format(date_obj: datetime) -> str:
         str: sortable format (ISO 8601)
     """
     return date_obj.strftime("%Y-%m-%d")  # ISO 8601 format
+
+
+def remove_ordinal_suffix(date_str):
+    """
+    Remove ordinal suffixes like 'st', 'nd', 'rd', 'th' from a date string.
+    """
+    return re.sub(r"(\d)(st|nd|rd|th)", r"\1", date_str)

@@ -1,34 +1,84 @@
+import glob
+import os
 import time
 
-from wtrl_ttt_scraper.calculate import calculate_percentile, latest_race, race_to_date
+from tqdm import tqdm
+
+from wtrl_ttt_scraper.calculate import calculate_percentile, latest_race
 from config import Config
 from wtrl_ttt_scraper.render import render_results, generate_index_html
-from wtrl_ttt_scraper.scrape import scrape_race
-from wtrl_ttt_scraper.format import iso_8601_format
+from wtrl_ttt_scraper.scrape import (
+    scrape_result,
+    is_authenticated,
+    scrape_event,
+    get_authentication_credentials,
+    AuthenticationError,
+)
 
 
-if __name__ == "__main__":
+def run_all_configs():
+    # Match all specific config files
+    config_files = glob.glob("config.secret.*.json")
+
+    # Add `config.secret.json` if it exists
+    if os.path.exists("config.secret.json"):
+        config_files.append("config.secret.json")
+
+    if not config_files:
+        print("No configuration files found matching 'config.secret.*.json'.")
+        return
+
+    for config_file in config_files:
+        print(f"\nRunning scraper with config: {config_file}")
+        config = Config.load(config_file)
+        # Call the main scraping logic with this configuration
+        main_scraper_logic(config)
+
+
+def main_scraper_logic(config):
     try:
-        config = Config.load()
-        print(f"Config loaded for teams: {config.teams}")
+        team_names = [team.team_name for team in config.teams]
+        print(f"Generating results for: {team_names}\n")
     except FileNotFoundError:
         raise f"Error: Configuration file not found."
     except KeyError as e:
         raise f"Error: Missing key in configuration file: {e}"
 
+    if not is_authenticated():
+        # we need to update the credentials
+        credentials = get_authentication_credentials()
+        config = config.save_credentials(credentials)
+        assert is_authenticated()
+
     latest = latest_race()
     summary_stats = {}
+    result_updates = []
+    event_updates = []
+    errors = []
     for config_team in config.teams:
         summary_stats[config_team.team_name] = []
 
-    for race in range(latest, 0, -1):
-        wtrl_result, cached = scrape_race(race, refresh_cache=False)
-        if wtrl_result:
+    for race in tqdm(range(latest, 0, -1), desc="Processing Races"):
+        try:
+            event, cached_event = scrape_event(race, refresh_cache=False)
+            result, cached_result = scrape_result(
+                race, refresh_cache=not event.is_finalised
+            )
+        except AuthenticationError:
+            errors.append(race)
+            continue
+
+        if not cached_event:
+            event_updates.append(race)
+        if not cached_result:
+            result_updates.append(race)
+
+        if result:
             for config_team in config.teams:
-                team = wtrl_result.get_team(config_team.team_name)
+                team = result.get_team(config_team.team_name)
                 if not team and config_team.aliases:
                     for alias in config_team.aliases:
-                        team = wtrl_result.get_team(alias)
+                        team = result.get_team(alias)
                         if team:
                             break
 
@@ -36,32 +86,41 @@ if __name__ == "__main__":
                     summary_stats[config_team.team_name].append(
                         {
                             "Race": race,
-                            "Date": iso_8601_format(race_to_date(race)),
+                            "Date": event.race_date,
+                            "Course": event.course_name,
+                            "Laps": event.laps,
                             "Rank": team.rank,
-                            "Entries": wtrl_result.entries,
+                            "Entries": result.entries,
                             "Percentile": calculate_percentile(
-                                team.rank, wtrl_result.entries
+                                team.rank, result.entries
                             ),
                             "Riders": team.rider_count,
                             "Team": team.rider_initials_list("·"),
+                            "Distance (km)": round(event.distance_km, 1),
                             "Time": team.finish_time,
                             "Speed (km/h)": team.average_speed,
                             "P1-4 (W/kg)": team.average_power,
                             "Coffee️ Class": team.coffee_class,
-                            "Coffee Rank": wtrl_result.coffee_rank(team),
-                            "Coffee️ Entries": wtrl_result.coffee_class_entries(
+                            "Coffee Rank": result.coffee_rank(team),
+                            "Coffee️ Entries": result.coffee_class_entries(
                                 team.coffee_class
                             ),
                             "Coffee️ Percentile": calculate_percentile(
-                                wtrl_result.coffee_rank(team),
-                                wtrl_result.coffee_class_entries(team.coffee_class),
+                                result.coffee_rank(team),
+                                result.coffee_class_entries(team.coffee_class),
                             ),
+                            "Status": event.status,
                         }
                     )
-        if not cached:
+        if not (cached_result or cached_event):
             time.sleep(0.5)
 
+    print(f'\nEvents updated: {", ".join([str(event) for event in event_updates])}')
+    print(f'Results updated: {", ".join([str(result) for result in result_updates])}')
+    print(f'Errors: {", ".join([str(error) for error in errors])}')
+
     # render all the outputs
+    print("\nPages generated:")
     for key, val in summary_stats.items():
         if val:
             render_results(val, key)
@@ -70,3 +129,7 @@ if __name__ == "__main__":
             pass
 
     generate_index_html(list(summary_stats.keys()))
+
+
+if __name__ == "__main__":
+    run_all_configs()

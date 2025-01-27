@@ -122,7 +122,7 @@ def generate_index_html(teams: List[str]):
         teams List[str]: The list of teams tracked
     """
     os.makedirs(RESULTS_DIR, exist_ok=True)
-    config = Config.load()
+    config = Config.get()
 
     # Start building the index.html content
     index_content = f"""
@@ -150,14 +150,16 @@ def generate_index_html(teams: List[str]):
     """
 
     # Write the index.html file to the output directory
-    with open(os.path.join(RESULTS_DIR, "index.html"), "w") as index_file:
+    os.makedirs(config.club_results_dir, exist_ok=True)
+    output_file = os.path.join(config.club_results_dir, "index.html")
+    with open(output_file, "w") as index_file:
         index_file.write(index_content)
 
-    print("index.html generated successfully.")
+    print(f"+{output_file}")
 
 
 def render_results(summary_stats: list, team: str):
-    os.makedirs(RESULTS_DIR, exist_ok=True)
+    config = Config.get()
 
     # Convert summary stats to a DataFrame
     df = pd.DataFrame(summary_stats)
@@ -193,8 +195,9 @@ def render_results(summary_stats: list, team: str):
     """
 
     # Save the dashboard to an HTML file
-    filename = slugify(team)
-    with open(f"{RESULTS_DIR}/{filename}.html", "w") as f:
+    os.makedirs(config.club_results_dir, exist_ok=True)
+    output_file = os.path.join(config.club_results_dir, f"{slugify(team)}.html")
+    with open(output_file, "w") as f:
         f.write(dashboard_html)
 
-    print(f"Results saved as {filename}.html")
+    print(f"+{output_file}")

@@ -3,3 +3,6 @@ tabulate
 pandas
 plotly
 black
+beautifulsoup4
+selenium
+tqdm

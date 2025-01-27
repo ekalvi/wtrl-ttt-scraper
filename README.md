@@ -4,6 +4,8 @@
 ## Project Overview
 The **WTRL TTT Scraper** is a Python-based project designed to scrape, process, and visualize time trial results from the WTRL website. It provides detailed data analysis for multiple teams and riders, generates dashboards with sortable tables and charts, and outputs static HTML files.
 
+The results are found here (requires a WTRL account): https://www.wtrl.racing/ttt-results/ 
+
 ---
 
 ## Features
@@ -51,9 +53,10 @@ The **WTRL TTT Scraper** is a Python-based project designed to scrape, process, 
   ```
 
 ### 3. Extract Required Tokens
-- Use your browser’s **Developer Tools** to extract the required values:
+- By running `main.py` a browser will open up and you will login to the website and the tokens will automatically be extracted and inserted into the secrets file
+- [Optional] Use your browser’s **Developer Tools** to extract the required values:
   - **`wtrl_sid`** and **`wtrl_ouid`**: Found under `Application > Cookies > https://www.wtrl.racing`.
-  - **`ctoken`**: Found under `Application > Session Storage > https://www.wtrl.racing`.
+  - **`ctoken`**: Found under `Application > Session Storage > https://www.wtrl.racing`. This will need to be refreshed after being signed out.
 
 ---
 
@@ -83,13 +86,14 @@ WTRL-TTT-Scraper/
 ## Usage
 
 ### 1. Run the Scraper
-- Execute the main script to scrape data and generate dashboards:
+- Execute the main script to scrape data and generate results:
   ```bash
   python main.py
   ```
+- The script will look for all configuration files named config.secret.json (or matching config.secret.*.json for multiple clubs) in the root directory.
 
 ### 2. Access Results
-- Generated HTML files will be saved in the `results/` directory:
+- Generated HTML files will be saved in the `results/[club_name]` directory:
   - `index.html`: Central index file with links to all team dashboards.
   - `[team_name].html`: Individual dashboards for each team.
 

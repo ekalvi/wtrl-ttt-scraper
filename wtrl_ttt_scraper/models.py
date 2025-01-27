@@ -1,5 +1,7 @@
+import json
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
+from datetime import datetime, timedelta
 from typing import List, Optional
 
 from wtrl_ttt_scraper.format import format_time
@@ -86,12 +88,15 @@ class Team:
         """
         if len(self.riders) >= 5:
             selected_riders = [
-                rider.wkg for rider in self.riders if rider.rider_rank <= 4
+                rider.wkg
+                for rider in self.riders
+                if rider.rider_rank <= 4 and rider.wkg is not None
             ]
         else:
             selected_riders = [
                 rider.wkg
                 for rider in sorted(self.riders, key=lambda r: r.rider_rank)[:3]
+                if rider.wkg is not None
             ]
         return round(sum(selected_riders) / len(selected_riders), 2)
 
@@ -122,7 +127,7 @@ class Team:
 
 
 @dataclass
-class WTRLResult:
+class Result:
     event: Optional[str]  # 'event': Event name (optional)
     data: List[Team]  # 'data': List of teams
     success: bool  # 'success': API call success
@@ -154,3 +159,100 @@ class WTRLResult:
             ):
                 rank += 1
         return rank
+
+    @staticmethod
+    def save_to_json(result: "Result", output_file: str):
+        """
+        Save a WTRLResult instance to a JSON file.
+
+        Args:
+            result (Result): The WTRLResult instance to save.
+            output_file (str): The path to the output JSON file.
+        """
+        try:
+            # Convert the dataclass instance to a dictionary
+            result_dict = asdict(result)
+
+            # Serialize the dictionary to JSON
+            with open(output_file, "w") as file:
+                json.dump(result_dict, file, default=str, indent=4)
+
+        except Exception as e:
+            raise Exception(f"An error occurred while saving the WTRLResult: {e}")
+
+    @staticmethod
+    def load_from_json(input_file: str) -> "Result":
+        """
+        Load a WTRLResult instance from a JSON file.
+
+        Args:
+            input_file (str): The path to the JSON file.
+
+        Returns:
+            Result: An instance of the WTRLResult class populated with data from the JSON file.
+        """
+        from wtrl_ttt_scraper.parse import parse_wtrl_result
+
+        with open(input_file, "r") as file:
+            data = json.load(file)
+        return parse_wtrl_result(data)
+
+
+@dataclass
+class Event:
+    race_title: str
+    course_name: str
+    laps: int
+    distance_km: float
+    race_date: datetime
+    status: str
+
+    @property
+    def is_finalised(self) -> bool:
+        """
+        Returns True if the event is finalised (status is 'Finalised')
+        or if the race date is more than one week old.
+        """
+        one_week_ago = datetime.now() - timedelta(weeks=1)
+        return self.status == "Finalised" or self.race_date < one_week_ago
+
+    @staticmethod
+    def save_to_json(event: "Event", output_file: str):
+        """
+        Save an Event instance to a JSON file.
+
+        Args:
+            event (Event): The Event instance to save.
+            output_file (str): The path to the output JSON file.
+        """
+        try:
+            # Convert the dataclass instance to a dictionary
+            event_dict = asdict(event)
+
+            # Serialize the dictionary to JSON, handling datetime fields
+            with open(output_file, "w") as file:
+                json.dump(event_dict, file, default=str, indent=4)
+
+        except Exception as e:
+            raise Exception(f"An error occurred while saving the Event: {e}")
+
+    @staticmethod
+    def load_from_json(input_file: str) -> "Event":
+        """
+        Load an Event instance from a JSON file.
+
+        Args:
+            input_file (str): The path to the JSON file.
+
+        Returns:
+            Event: An instance of the Event class populated with data from the JSON file.
+        """
+        # Read and parse the JSON file
+        with open(input_file, "r") as file:
+            data = json.load(file)
+
+        # Convert the race_date string back to a datetime object
+        data["race_date"] = datetime.fromisoformat(data["race_date"])
+
+        # Create and return an Event instance
+        return Event(**data)
