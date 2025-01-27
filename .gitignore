@@ -1,4 +1,4 @@
-config.secret.json
+config.secret*.json
 results/
 __pycache__/
 .idea/

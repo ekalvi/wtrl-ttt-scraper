@@ -85,13 +85,14 @@ WTRL-TTT-Scraper/
 ## Usage
 
 ### 1. Run the Scraper
-- Execute the main script to scrape data and generate dashboards:
+- Execute the main script to scrape data and generate results:
   ```bash
   python main.py
   ```
+- The script will look for all configuration files named config.secret.json (or matching config.secret.*.json for multiple clubs) in the root directory.
 
 ### 2. Access Results
-- Generated HTML files will be saved in the `results/` directory:
+- Generated HTML files will be saved in the `results/[club_name]` directory:
   - `index.html`: Central index file with links to all team dashboards.
   - `[team_name].html`: Individual dashboards for each team.
 

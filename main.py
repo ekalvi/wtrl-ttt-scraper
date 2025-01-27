@@ -1,3 +1,5 @@
+import glob
+import os
 import time
 
 from tqdm import tqdm
@@ -13,9 +15,27 @@ from wtrl_ttt_scraper.scrape import (
 )
 
 
-if __name__ == "__main__":
+def run_all_configs():
+    # Match all specific config files
+    config_files = glob.glob("config.secret.*.json")
+
+    # Add `config.secret.json` if it exists
+    if os.path.exists("config.secret.json"):
+        config_files.append("config.secret.json")
+
+    if not config_files:
+        print("No configuration files found matching 'config.secret.*.json'.")
+        return
+
+    for config_file in config_files:
+        print(f"\nRunning scraper with config: {config_file}")
+        config = Config.load(config_file)
+        # Call the main scraping logic with this configuration
+        main_scraper_logic(config)
+
+
+def main_scraper_logic(config):
     try:
-        config = Config.load()
         team_names = [team.team_name for team in config.teams]
         print(f"Generating results for: {team_names}\n")
     except FileNotFoundError:
@@ -101,3 +121,7 @@ if __name__ == "__main__":
             pass
 
     generate_index_html(list(summary_stats.keys()))
+
+
+if __name__ == "__main__":
+    run_all_configs()

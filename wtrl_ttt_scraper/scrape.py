@@ -26,7 +26,7 @@ class AuthenticationError(Exception):
 
 # Headers from the curl command
 def get_headers() -> dict:
-    config = Config.load()
+    config = Config.get()
     return {
         "accept": "application/json, text/javascript, */*; q=0.01",
         "accept-language": "en-CA,en-GB;q=0.9,en-US;q=0.8,en;q=0.7",
@@ -147,7 +147,7 @@ def scrape_result(race_number: int, refresh_cache: bool = False) -> (Result, boo
 
 
 def scrape_event(race_number: int, refresh_cache: bool = False) -> (Event, bool):
-    config = Config.load()
+    config = Config.get()
 
     # Directory to save the cache
     os.makedirs(CACHE_DIR, exist_ok=True)

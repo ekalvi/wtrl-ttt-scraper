@@ -1,11 +1,14 @@
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Optional
 import json
 import os
+
+from wtrl_ttt_scraper.format import slugify
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))  # Root directory of the project
 CACHE_DIR = os.path.join(BASE_DIR, "cache")
 RESULTS_DIR = os.path.join(BASE_DIR, "results")
+CONFIG = None
 
 
 @dataclass
@@ -22,10 +25,14 @@ class Config:
     ctoken: str
     teams: List[TeamConfig] = field(default_factory=list)
 
+    @property
+    def club_results_dir(self) -> str:
+        return os.path.join(RESULTS_DIR, slugify(self.club_name))
+
     @staticmethod
     def load(file_path: str = "config.secret.json") -> "Config":
         """
-        Load configuration from a JSON file.
+        Load configuration from a JSON file and set globally.
 
         Args:
             file_path (str): Path to the configuration file.
@@ -35,7 +42,9 @@ class Config:
         """
         with open(file_path, "r") as file:
             data = json.load(file)
-        return Config(
+
+        global CONFIG
+        CONFIG = Config(
             club_name=data["club_name"],
             wtrl_sid=data["wtrl_sid"],
             wtrl_ouid=data["wtrl_ouid"],
@@ -45,6 +54,20 @@ class Config:
                 for team in data["teams"]
             ],
         )
+        return Config.get()
+
+    @staticmethod
+    def get() -> Optional["Config"]:
+        """
+        Retrieve the globally loaded configuration.
+
+        Returns:
+            Config: The loaded configuration object.
+        """
+        if CONFIG is None:
+            raise ValueError("Configuration not loaded. Call load() first.")
+
+        return CONFIG
 
     @staticmethod
     def save_credentials(new_credentials: dict, file_path: str = "config.secret.json"):
