@@ -12,6 +12,7 @@ from wtrl_ttt_scraper.scrape import (
     is_authenticated,
     scrape_event,
     get_authentication_credentials,
+    AuthenticationError,
 )
 
 
@@ -53,14 +54,20 @@ def main_scraper_logic(config):
     summary_stats = {}
     result_updates = []
     event_updates = []
+    errors = []
     for config_team in config.teams:
         summary_stats[config_team.team_name] = []
 
     for race in tqdm(range(latest, 0, -1), desc="Processing Races"):
-        event, cached_event = scrape_event(race, refresh_cache=False)
-        result, cached_result = scrape_result(
-            race, refresh_cache=not event.is_finalised
-        )
+        try:
+            event, cached_event = scrape_event(race, refresh_cache=False)
+            result, cached_result = scrape_result(
+                race, refresh_cache=not event.is_finalised
+            )
+        except AuthenticationError:
+            errors.append(race)
+            continue
+
         if not cached_event:
             event_updates.append(race)
         if not cached_result:
@@ -110,6 +117,7 @@ def main_scraper_logic(config):
 
     print(f'\nEvents updated: {", ".join([str(event) for event in event_updates])}')
     print(f'Results updated: {", ".join([str(result) for result in result_updates])}')
+    print(f'Errors: {", ".join([str(error) for error in errors])}')
 
     # render all the outputs
     print("\nPages generated:")
