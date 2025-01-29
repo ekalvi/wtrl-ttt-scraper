@@ -6,3 +6,4 @@ black
 beautifulsoup4
 selenium
 tqdm
+dacite

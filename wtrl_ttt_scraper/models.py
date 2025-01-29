@@ -4,6 +4,8 @@ from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
 from typing import List, Optional
 
+import dacite
+
 from wtrl_ttt_scraper.format import format_time
 
 
@@ -13,14 +15,14 @@ class Rider:
     rider_rank: int  # 'bb': Rider rank
     rider_name: str  # 'cc': Rider name
     rider_position: Optional[str]  # 'dd': Position (optional, can be None)
-    team_name: str  # 'ee': Team name
-    wkg: float  # 'ff': Watts per kilogram
-    power: int  # 'gg': Power in watts
+    team_name: Optional[str]  # 'ee': Team name
+    wkg: Optional[float]  # 'ff': Watts per kilogram
+    power: Optional[int]  # 'gg': Power in watts
     # avg_hr: int  # 'hh': Average heart rate
-    completed_laps: int  # 'ii': Laps completed
-    total_time: float  # 'jj': Total time (seconds)
-    time_gap: float  # 'kk': Time gap to fastest (seconds)
-    avg_speed: float  # 'll': Average speed (km/h)
+    completed_laps: Optional[int]  # 'ii': Laps completed
+    total_time: Optional[float]  # 'jj': Total time (seconds)
+    time_gap: Optional[float]  # 'kk': Time gap to fastest (seconds)
+    avg_speed: Optional[float]  # 'll': Average speed (km/h)
     distance: int  # 'mm': Distance covered (meters)
 
     @property
@@ -58,23 +60,23 @@ class Rider:
 class Team:
     riders: List[Rider]  # 'a': List of riders
     rank: int  # 'b': Team rank
-    total_distance: float  # 'c': Total distance (km)
+    total_distance: Optional[float]  # 'c': Total distance (km)
     # team_rank: int  # 'd': Rank of team within coffee class
-    total_power: float  # 'e': Total power output (Watts)
+    total_power: Optional[float]  # 'e': Total power output (Watts)
     zone: int  # 'f': Zone (optional, can be None)
     dropped_riders: int  # 'g': Number of riders dropped
     coffee_class: str  # 'h': Coffee class (e.g., "Espresso")
-    team_time: float  # 'i': Total time for the team (seconds)
-    lap_count: int  # 'j': Total laps completed
-    avg_speed: float  # 'k': Average speed of team (km/h)
-    total_tss: int  # 'l': Total Training Stress Score
-    total_if: int  # 'm': Total Intensity Factor
-    total_np: int  # 'n': Normalized Power
+    team_time: Optional[float]  # 'i': Total time for the team (seconds)
+    lap_count: Optional[int]  # 'j': Total laps completed
+    avg_speed: Optional[float]  # 'k': Average speed of team (km/h)
+    total_tss: Optional[int]  # 'l': Total Training Stress Score
+    total_if: Optional[int]  # 'm': Total Intensity Factor
+    total_np: Optional[int]  # 'n': Normalized Power
     team_name: str  # 'o': Team name
     # zone: Optional[int]  # 'p': Zone (optional, can be None)
     rider_count: int  # 'q': Number of racers in the team
     completed: int  # 'r': Indicator of whether the team completed
-    total_time_calc: float  # 'z': Calculated total time for team (seconds)
+    total_time_calc: Optional[float]  # 'z': Calculated total time for team (seconds)
 
     @property
     def average_power(self) -> float:
@@ -178,24 +180,14 @@ class Result:
                 json.dump(result_dict, file, default=str, indent=4)
 
         except Exception as e:
-            raise Exception(f"An error occurred while saving the WTRLResult: {e}")
+            raise Exception(f"An error occurred while saving the Result: {e}")
 
     @staticmethod
     def load_from_json(input_file: str) -> "Result":
-        """
-        Load a WTRLResult instance from a JSON file.
-
-        Args:
-            input_file (str): The path to the JSON file.
-
-        Returns:
-            Result: An instance of the WTRLResult class populated with data from the JSON file.
-        """
-        from wtrl_ttt_scraper.parse import parse_wtrl_result
-
+        """Load a Result instance from a JSON file using dacite."""
         with open(input_file, "r") as file:
             data = json.load(file)
-        return parse_wtrl_result(data)
+        return dacite.from_dict(data_class=Result, data=data)
 
 
 @dataclass
