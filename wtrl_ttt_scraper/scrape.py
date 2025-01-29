@@ -1,3 +1,5 @@
+import json
+
 import requests
 import os
 
@@ -130,15 +132,16 @@ def scrape_result(race_number: int, refresh_cache: bool = False) -> (Result, boo
 
     # Check if the file exists locally
     if not refresh_cache and os.path.exists(output_file):
-        result = Result.load_from_json(output_file)
-        return result, True
+        with open(output_file, "r") as file:
+            data = json.load(file)
+        return parse_wtrl_result(data), True
 
     # If not, fetch from the API
     response = fetch_result(race_number)
     if is_authenticated(response):
-        result = parse_wtrl_result(response.json())
-        Result.save_to_json(result, output_file)
-        return result, False
+        with open(output_file, "w") as file:
+            file.write(response.text)
+        return parse_wtrl_result(response.json()), False
 
     else:
         raise AuthenticationError(

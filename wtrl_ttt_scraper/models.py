@@ -160,43 +160,6 @@ class Result:
                 rank += 1
         return rank
 
-    @staticmethod
-    def save_to_json(result: "Result", output_file: str):
-        """
-        Save a WTRLResult instance to a JSON file.
-
-        Args:
-            result (Result): The WTRLResult instance to save.
-            output_file (str): The path to the output JSON file.
-        """
-        try:
-            # Convert the dataclass instance to a dictionary
-            result_dict = asdict(result)
-
-            # Serialize the dictionary to JSON
-            with open(output_file, "w") as file:
-                json.dump(result_dict, file, default=str, indent=4)
-
-        except Exception as e:
-            raise Exception(f"An error occurred while saving the WTRLResult: {e}")
-
-    @staticmethod
-    def load_from_json(input_file: str) -> "Result":
-        """
-        Load a WTRLResult instance from a JSON file.
-
-        Args:
-            input_file (str): The path to the JSON file.
-
-        Returns:
-            Result: An instance of the WTRLResult class populated with data from the JSON file.
-        """
-        from wtrl_ttt_scraper.parse import parse_wtrl_result
-
-        with open(input_file, "r") as file:
-            data = json.load(file)
-        return parse_wtrl_result(data)
-
 
 @dataclass
 class Event:
