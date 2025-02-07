@@ -1,19 +1,43 @@
 {
-  "club_name": "Waterloo Cycling Club (WCC)",
-  "wtrl_sid": "your_sid_here",
-  "wtrl_ouid": "your_ouid_here",
-  "ctoken": "your_ctoken_here",
-  "teams": [
+  "netlify_auth_token": "your_global_netlify_auth_token",
+  "wrtl_sid": "global_wrtl_sid",
+  "wrtl_ouid": "global_wrtl_ouid",
+  "ctoken": "global_ctoken",
+  "clubs": [
     {
-      "team_name": "Waterloo Ones",
-      "aliases": [
-        "WCC Butter Tarts"
+      "club_name": "Waterloo Cycling Club",
+      "site_id": "your_wcc_site_id",
+      "teams": [
+        {
+          "team_name": "Waterloo Ones",
+          "aliases": ["WCC Butter Tarts"]
+        },
+        {
+          "team_name": "Waterloo Twos",
+          "aliases": ["WCC Canucks"]
+        },
+        {
+          "team_name": "Waterloo Threes",
+          "aliases": ["WCC Coureur des Bois"]
+        },
+        {
+          "team_name": "Waterloo Fours",
+          "aliases": []
+        }
       ]
     },
     {
-      "team_name": "Waterloo Threes",
-      "aliases": [
-        "WCC Coureur des Bois"
+      "club_name": "SISU Racing",
+      "site_id": "your_sisu_site_id",
+      "teams": [
+        {
+          "team_name": "SISU Racing Grit",
+          "aliases": []
+        },
+        {
+          "team_name": "SISU Racing Mokki",
+          "aliases": []
+        }
       ]
     }
   ]

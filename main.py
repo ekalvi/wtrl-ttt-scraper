@@ -1,11 +1,9 @@
-import glob
 import os
 import time
-
 from tqdm import tqdm
-
-from wtrl_ttt_scraper.calculate import calculate_percentile, latest_race
 from config import Config
+from wtrl_ttt_scraper.calculate import calculate_percentile, latest_race
+from wtrl_ttt_scraper.format import slugify
 from wtrl_ttt_scraper.render import render_results, generate_index_html
 from wtrl_ttt_scraper.scrape import (
     scrape_result,
@@ -16,49 +14,48 @@ from wtrl_ttt_scraper.scrape import (
 )
 
 
-def run_all_configs():
-    # Match all specific config files
-    config_files = glob.glob("config.secret.*.json")
-
-    # Add `config.secret.json` if it exists
-    if os.path.exists("config.secret.json"):
-        config_files.append("config.secret.json")
-
-    if not config_files:
-        print("No configuration files found matching 'config.secret.*.json'.")
-        return
-
-    for config_file in config_files:
-        print(f"\nRunning scraper with config: {config_file}")
-        config = Config.load(config_file)
-        # Call the main scraping logic with this configuration
-        main_scraper_logic(config)
+def load_config():
+    """Load configuration from `config.secret.json` if available, otherwise fallback to `config.json`."""
+    config_file = (
+        "config.secret.json" if os.path.exists("config.secret.json") else "config.json"
+    )
+    print(f"\n📂 Loading configuration from: {config_file}")
+    return Config.load(config_file)
 
 
-def main_scraper_logic(config):
+def main_scraper_logic(config_: Config):
+    """Main scraping logic for all clubs and teams."""
     try:
-        team_names = [team.team_name for team in config.teams]
-        print(f"Generating results for: {team_names}\n")
+        print("\n📊 Generating results for the following teams:\n")
+        for club in config_.clubs:
+            print(f"🏢 {club.club_name}")
+            for team in club.teams:
+                print(f"   ├── 🚴 {team.team_name}")
+        print("\n")
     except FileNotFoundError:
-        raise f"Error: Configuration file not found."
+        raise FileNotFoundError("❌ Error: Configuration file not found.")
     except KeyError as e:
-        raise f"Error: Missing key in configuration file: {e}"
+        raise KeyError(f"❌ Error: Missing key in configuration file: {e}")
 
+    # Authenticate once for all clubs
     if not is_authenticated():
-        # we need to update the credentials
+        print("\n🔐 Authenticating with WTRL...")
         credentials = get_authentication_credentials()
-        config = config.save_credentials(credentials)
+        config_ = config_.save_credentials(credentials)
         assert is_authenticated()
+        print("✅ Authentication successful!\n")
 
     latest = latest_race()
-    summary_stats = {}
-    result_updates = []
-    event_updates = []
-    errors = []
-    for config_team in config.teams:
-        summary_stats[config_team.team_name] = []
 
-    for race in tqdm(range(latest, 0, -1), desc="Processing Races"):
+    # ✅ Fix: Use club names and team names as dictionary keys
+    summary_stats = {
+        club.club_name: {team.team_name: [] for team in club.teams}
+        for club in config_.clubs
+    }
+
+    result_updates, event_updates, errors = [], [], []
+
+    for race in tqdm(range(latest, 0, -1), desc="⏳ Processing Races"):
         try:
             event, cached_event = scrape_event(race, refresh_cache=False)
             result, cached_result = scrape_result(
@@ -74,62 +71,92 @@ def main_scraper_logic(config):
             result_updates.append(race)
 
         if result:
-            for config_team in config.teams:
-                team = result.get_team(config_team.team_name)
-                if not team and config_team.aliases:
-                    for alias in config_team.aliases:
-                        team = result.get_team(alias)
-                        if team:
-                            break
+            for club in config_.clubs:
+                for team_config in club.teams:
+                    team = result.get_team(team_config.team_name)
 
-                if team:
-                    summary_stats[config_team.team_name].append(
-                        {
-                            "Race": race,
-                            "Date": event.race_date,
-                            "Course": event.course_name,
-                            "Laps": event.laps,
-                            "Rank": team.rank,
-                            "Entries": result.entries,
-                            "Percentile": calculate_percentile(
-                                team.rank, result.entries
-                            ),
-                            "Riders": team.rider_count,
-                            "Team": team.rider_initials_list("·"),
-                            "Distance (km)": round(event.distance_km, 1),
-                            "Time": team.finish_time,
-                            "Speed (km/h)": team.average_speed,
-                            "P1-4 (W/kg)": team.average_power,
-                            "Coffee️ Class": team.coffee_class,
-                            "Coffee Rank": result.coffee_rank(team),
-                            "Coffee️ Entries": result.coffee_class_entries(
-                                team.coffee_class
-                            ),
-                            "Coffee️ Percentile": calculate_percentile(
-                                result.coffee_rank(team),
-                                result.coffee_class_entries(team.coffee_class),
-                            ),
-                            "Status": event.status,
-                        }
-                    )
+                    # Check aliases if no exact team match found
+                    if not team and team_config.aliases:
+                        for alias in team_config.aliases:
+                            team = result.get_team(alias)
+                            if team:
+                                break
+
+                    if team:
+                        summary_stats[club.club_name][team_config.team_name].append(
+                            {
+                                "Race": race,
+                                "Date": event.race_date,
+                                "Course": event.course_name,
+                                "Laps": event.laps,
+                                "Rank": team.rank,
+                                "Entries": result.entries,
+                                "Percentile": calculate_percentile(
+                                    team.rank, result.entries
+                                ),
+                                "Riders": team.rider_count,
+                                "Team": team.rider_initials_list("·"),
+                                "Distance (km)": round(event.distance_km, 1),
+                                "Time": team.finish_time,
+                                "Speed (km/h)": team.average_speed,
+                                "P1-4 (W/kg)": team.average_power,
+                                "Coffee️ Class": team.coffee_class,
+                                "Coffee Rank": result.coffee_rank(team),
+                                "Coffee️ Entries": result.coffee_class_entries(
+                                    team.coffee_class
+                                ),
+                                "Coffee️ Percentile": calculate_percentile(
+                                    result.coffee_rank(team),
+                                    result.coffee_class_entries(team.coffee_class),
+                                ),
+                                "Status": event.status,
+                            }
+                        )
+
         if not (cached_result or cached_event):
             time.sleep(0.5)
 
-    print(f'\nEvents updated: {", ".join([str(event) for event in event_updates])}')
-    print(f'Results updated: {", ".join([str(result) for result in result_updates])}')
-    print(f'Errors: {", ".join([str(error) for error in errors])}')
+    # ✅ Improved Summary Output
+    print("\n📊 Summary of Updates:\n")
 
-    # render all the outputs
-    print("\nPages generated:")
-    for key, val in summary_stats.items():
-        if val:
-            render_results(val, key)
-        else:
-            # TODO: handle no results
-            pass
+    if event_updates:
+        print(
+            f"📅 Events updated ({len(event_updates)}): {', '.join(map(str, event_updates))}"
+        )
+    else:
+        print("📅 No event updates.")
 
-    generate_index_html(list(summary_stats.keys()))
+    if result_updates:
+        print(
+            f"📊 Results updated ({len(result_updates)}): {', '.join(map(str, result_updates))}"
+        )
+    else:
+        print("📊 No result updates.")
+
+    if errors:
+        print(f"❌ Errors ({len(errors)}): {', '.join(map(str, errors))}")
+    else:
+        print("✅ No errors encountered.")
+
+    # ✅ Properly formatted output per club and team
+    print("\n📄 Pages generated:")
+    for club_name, team_results in summary_stats.items():
+        print(f"\n🏢 {club_name}")
+        for team_name, results in team_results.items():
+            if results:
+                club = next(
+                    club for club in config_.clubs if club.club_name == club_name
+                )
+                render_results(results, club, team_name)
+                print(f"   ├── 📄 {slugify(team_name)}.html")
+            else:
+                print(f"   ├── ⚠ No results found for {team_name}")
+
+    for club in config_.clubs:
+        generate_index_html(club)
+        print(f"📄 Index generated: {club.club_results_dir}/index.html")
 
 
 if __name__ == "__main__":
-    run_all_configs()
+    config = load_config()
+    main_scraper_logic(config)
