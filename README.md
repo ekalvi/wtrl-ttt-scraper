@@ -88,28 +88,23 @@ The results are found here (requires a WTRL account):
 WTRL-TTT-Scraper/
 ├── cache/                   # Cached race results in JSON format
 ├── results/                 # Generated HTML files for clubs and teams
-│   ├── waterloo-cycling-club/  # Results for Waterloo Cycling Club
-│   │   ├── index.html         # Index for all WCC teams
-│   │   ├── waterloo-ones.html # Results for Waterloo Ones
-│   │   ├── waterloo-twos.html # Results for Waterloo Twos
-│   ├── sisu-racing/           # Results for SISU Racing
-│   │   ├── index.html         # Index for SISU teams
-│   │   ├── sisu-racing-grit.html  # Results for SISU Racing Grit
-│   │   ├── sisu-racing-mokki.html # Results for SISU Racing Mokki
-├── wtrl/                    # Core package for the scraper
+├── wtrl_ttt_scraper/        # Core package for the scraper
 │   ├── __init__.py          # Package init
-│   ├── scrape.py            # Scraping logic
-│   ├── render.py            # HTML rendering
-│   ├── models.py            # Data models
+│   ├── calculate.py         # Percentile calculations
+│   ├── deploy.py            # Automates deployment to Netlify
 │   ├── format.py            # Formatting utilities
+│   ├── models.py            # Data models
 │   ├── parse.py             # Parsing utilities
-│   ├── calculate.py         # Calculations (e.g., percentiles)
-├── main.py                  # Entry point for the scraper
-├── config.py                 # Configuration logic
-├── requirements.txt          # Python dependencies
-├── README.md                 # Documentation
-├── LICENSE.md                # License file
-└── scripts.sh                # Utility scripts for automation
+│   ├── render.py            # HTML rendering
+│   ├── scrape.py            # Scraping logic
+├── .gitignore               # Ignore sensitive files
+├── config.json              # Default configuration
+├── config.secret.json       # User-specific configuration (ignored in Git)
+├── LICENSE.md               # License file
+├── main.py                  # Entry point for scraping
+├── README.md                # Documentation
+├── requirements.txt         # Python dependencies
+└── scripts.sh               # Utility scripts for automation
 ```
 
 ---
@@ -134,8 +129,8 @@ WTRL-TTT-Scraper/
 
 ### **3. Publish Results**
 - Host the `results/` directory on a **static hosting service**:
-  - **[Netlify](https://www.netlify.com/)** → Drag and drop `results/` into Netlify’s UI.
-  - **[GitHub Pages](https://pages.github.com/)** → Push `results/` to GitHub and enable Pages.
+  - Netlify deployment is automated via `deploy.py`
+  - [optional] You can also manually drag and drop `results/[club]` into Netlify’s UI.
   
 ### **4. Format Code**
 - Ensure Python code is formatted using **[Black](https://black.readthedocs.io/en/latest/)**

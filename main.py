@@ -4,7 +4,7 @@ from tqdm import tqdm
 from config import Config
 from wtrl_ttt_scraper.calculate import calculate_percentile, latest_race
 from wtrl_ttt_scraper.format import slugify
-from wtrl_ttt_scraper.render import render_results, generate_index_html
+from wtrl_ttt_scraper.render import generate_index_html, render_results
 from wtrl_ttt_scraper.scrape import (
     scrape_result,
     is_authenticated,
@@ -12,6 +12,7 @@ from wtrl_ttt_scraper.scrape import (
     get_authentication_credentials,
     AuthenticationError,
 )
+from wtrl_ttt_scraper.deploy import deploy_all_sites  # Import deploy logic
 
 
 def load_config():
@@ -116,7 +117,6 @@ def main_scraper_logic(config_: Config):
         if not (cached_result or cached_event):
             time.sleep(0.5)
 
-    # ✅ Improved Summary Output
     print("\n📊 Summary of Updates:\n")
 
     if event_updates:
@@ -138,7 +138,6 @@ def main_scraper_logic(config_: Config):
     else:
         print("✅ No errors encountered.")
 
-    # ✅ Properly formatted output per club and team
     print("\n📄 Pages generated:")
     for club_name, team_results in summary_stats.items():
         print(f"\n🏢 {club_name}")
@@ -155,6 +154,9 @@ def main_scraper_logic(config_: Config):
     for club in config_.clubs:
         generate_index_html(club)
         print(f"📄 Index generated: {club.club_results_dir}/index.html")
+
+    # ✅ Deploy all sites after results are generated
+    deploy_all_sites(config_)
 
 
 if __name__ == "__main__":
