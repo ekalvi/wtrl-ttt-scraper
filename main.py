@@ -59,9 +59,11 @@ def main_scraper_logic(config_: Config):
     for race in tqdm(range(latest, 0, -1), desc="⏳ Processing Races"):
         try:
             event, cached_event = scrape_event(race, refresh_cache=False)
-            result, cached_result = scrape_result(
-                race, refresh_cache=not event.is_finalised
-            )
+            should_refresh = not event.is_finalised and event.is_recent
+            if should_refresh and cached_event:
+                event, cached_event = scrape_event(race, refresh_cache=True)
+            result, cached_result = scrape_result(race, refresh_cache=should_refresh)
+
         except AuthenticationError:
             errors.append(race)
             continue
@@ -155,10 +157,9 @@ def main_scraper_logic(config_: Config):
         generate_index_html(club)
         print(f"📄 Index generated: {club.club_results_dir}/index.html")
 
-    # ✅ Deploy all sites after results are generated
-    deploy_all_sites(config_)
-
 
 if __name__ == "__main__":
     config = load_config()
     main_scraper_logic(config)
+    # ✅ Deploy all sites after results are generated
+    deploy_all_sites(config)
