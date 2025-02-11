@@ -4,6 +4,8 @@ import os
 
 from config import ClubConfig
 from wtrl_ttt_scraper.format import slugify
+from datetime import datetime
+
 
 HTML_HEAD = """
     <head>
@@ -55,6 +57,7 @@ HTML_FOOTER = f"""
                         </svg>
                         WTRL TTT Scraper
                     </a>
+                    @ {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
                 </div>
             </footer>
 """
