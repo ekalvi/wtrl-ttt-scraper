@@ -36,8 +36,8 @@ The results are found here (requires a WTRL account):
   ```json
   {
     "netlify_auth_token": "your_global_netlify_auth_token",
-    "wrtl_sid": "your_wtrl_sid",
-    "wrtl_ouid": "your_wtrl_ouid",
+    "wtrl_sid": "your_wtrl_sid",
+    "wtrl_ouid": "your_wtrl_ouid",
     "ctoken": "your_ctoken",
     "clubs": [
       {
@@ -78,7 +78,7 @@ The results are found here (requires a WTRL account):
 - Running `main.py` will open a browser for you to log in to WTRL.  
   The tokens will automatically be extracted and inserted into `config.secret.json`.  
 - **[Optional] Manually extract tokens using Developer Tools:**
-  - **`wtrl_sid`** and **`wrtl_ouid`**: Found under `Application > Cookies > https://www.wtrl.racing`.
+  - **`wtrl_sid`** and **`wtrl_ouid`**: Found under `Application > Cookies > https://www.wtrl.racing`.
   - **`ctoken`**: Found under `Application > Session Storage > https://www.wtrl.racing` (refresh after logout).
 
 ---
@@ -148,7 +148,7 @@ WTRL-TTT-Scraper/
 ## **Notes**
 - Make sure your **`config.secret.json`** file is excluded from version control (`.gitignore`).
 - The **`cache/` directory** stores JSON-formatted race results for caching.
-- Keep your **extracted tokens (`wtrl_sid`, `wrtl_ouid`, `ctoken`) secure**, as they are tied to your account.
+- Keep your **extracted tokens (`wtrl_sid`, `wtrl_ouid`, `ctoken`) secure**, as they are tied to your account.
 
 ---
 

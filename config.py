@@ -97,8 +97,8 @@ class Config:
                 config = json.load(file)
 
             # Update the global WTRL credentials
-            config["wrtl_sid"] = new_credentials.get("wrtl_sid", config["wrtl_sid"])
-            config["wrtl_ouid"] = new_credentials.get("wrtl_ouid", config["wrtl_ouid"])
+            config["wtrl_sid"] = new_credentials.get("wtrl_sid", config["wtrl_sid"])
+            config["wtrl_ouid"] = new_credentials.get("wtrl_ouid", config["wtrl_ouid"])
             config["ctoken"] = new_credentials.get("ctoken", config["ctoken"])
 
             with open(self.file_path, "w") as file:

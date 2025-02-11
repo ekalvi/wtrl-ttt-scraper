@@ -1,7 +1,7 @@
 {
   "netlify_auth_token": "your_global_netlify_auth_token",
-  "wrtl_sid": "global_wrtl_sid",
-  "wrtl_ouid": "global_wrtl_ouid",
+  "wtrl_sid": "global_wtrl_sid",
+  "wtrl_ouid": "global_wtrl_ouid",
   "ctoken": "global_ctoken",
   "clubs": [
     {
