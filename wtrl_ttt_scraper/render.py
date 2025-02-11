@@ -1,12 +1,11 @@
-from typing import List
-
 import plotly.graph_objects as go
 import pandas as pd
 import os
 
-from config import RESULTS_DIR
-from config import Config
+from config import ClubConfig
 from wtrl_ttt_scraper.format import slugify
+from datetime import datetime
+
 
 HTML_HEAD = """
     <head>
@@ -58,6 +57,7 @@ HTML_FOOTER = f"""
                         </svg>
                         WTRL TTT Scraper
                     </a>
+                    @ {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
                 </div>
             </footer>
 """
@@ -114,15 +114,14 @@ def render_results_table(df) -> str:
     )
 
 
-def generate_index_html(teams: List[str]):
+def generate_index_html(club: ClubConfig):
     """
-    Generates an index.html file with links to all the generated HTML files in the directory.
+    Generates an index.html file with links to all the generated HTML files in the club's directory.
 
     Args:
-        teams List[str]: The list of teams tracked
+        club (ClubConfig): The club configuration containing team information.
     """
-    os.makedirs(RESULTS_DIR, exist_ok=True)
-    config = Config.get()
+    os.makedirs(club.club_results_dir, exist_ok=True)
 
     # Start building the index.html content
     index_content = f"""
@@ -131,15 +130,16 @@ def generate_index_html(teams: List[str]):
     {HTML_HEAD}
     <body>
         <div class="container mx-auto">
-            <h1 class="text-2xl font-bold text-left mt-10 ml-10 mr-10">🏁 🚴 WTRL TTT Results - {config.club_name}</h1>
+            <h1 class="text-2xl font-bold text-left mt-10 ml-10 mr-10">🏁 🚴 WTRL TTT Results - {club.club_name}</h1>
             <ul class="list-disc mt-10 ml-20 mr-10">
     """
 
-    # Add links to each HTML file
-    for team in teams:
+    # Add links to each team's HTML file
+    for team in club.teams:
         index_content += f"""
-            <li><a class="text-blue-500 hover:underline font-medium" href="{slugify(team)}.html">{team}</a></li>
+            <li><a class="text-blue-500 hover:underline font-medium" href="{slugify(team.team_name)}.html">{team.team_name}</a></li>
         """
+
     # Close the HTML content
     index_content += f"""
             </ul>
@@ -149,18 +149,21 @@ def generate_index_html(teams: List[str]):
     </html>
     """
 
-    # Write the index.html file to the output directory
-    os.makedirs(config.club_results_dir, exist_ok=True)
-    output_file = os.path.join(config.club_results_dir, "index.html")
+    # Write the index.html file to the club's output directory
+    output_file = os.path.join(club.club_results_dir, "index.html")
     with open(output_file, "w") as index_file:
         index_file.write(index_content)
 
-    print(f"+{output_file}")
 
+def render_results(summary_stats: list, club: ClubConfig, team_name: str):
+    """
+    Generates and saves an HTML results page for a specific team in the correct club directory.
 
-def render_results(summary_stats: list, team: str):
-    config = Config.get()
-
+    Args:
+        summary_stats (list): The team's race results.
+        club (ClubConfig): The club configuration.
+        team_name (str): The name of the team.
+    """
     # Convert summary stats to a DataFrame
     df = pd.DataFrame(summary_stats)
 
@@ -172,10 +175,10 @@ def render_results(summary_stats: list, team: str):
     <body>
         <div class="container mx-auto">
             <h1 class="text-2xl font-bold text-left ml-10 mr-10 mt-10">
-                🏁 🚴 WTRL TTT Results - {team}
+                🏁 🚴 WTRL TTT Results - {team_name}
             </h1>
             <div class="ml-10 mt-5 mb-5">
-                <a href="." class="text-blue-500 hover:underline font-medium">⬅ All results</a>
+                <a href="index.html" class="text-blue-500 hover:underline font-medium">⬅ All results</a>
             </div>
             <div>{render_percentile_chart(df)}</div>
             <div class="table-container text-sm">
@@ -194,10 +197,10 @@ def render_results(summary_stats: list, team: str):
     </html>
     """
 
-    # Save the dashboard to an HTML file
-    os.makedirs(config.club_results_dir, exist_ok=True)
-    output_file = os.path.join(config.club_results_dir, f"{slugify(team)}.html")
+    # Ensure the club's result directory exists
+    os.makedirs(club.club_results_dir, exist_ok=True)
+
+    # Save the HTML file for this team inside the correct club directory
+    output_file = os.path.join(club.club_results_dir, f"{slugify(team_name)}.html")
     with open(output_file, "w") as f:
         f.write(dashboard_html)
-
-    print(f"+{output_file}")

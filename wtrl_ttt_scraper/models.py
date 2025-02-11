@@ -203,10 +203,16 @@ class Event:
     def is_finalised(self) -> bool:
         """
         Returns True if the event is finalised (status is 'Finalised')
-        or if the race date is more than one week old.
         """
-        one_week_ago = datetime.now() - timedelta(weeks=1)
-        return self.status == "Finalised" or self.race_date < one_week_ago
+        return self.status == "Finalised"
+
+    @property
+    def is_recent(self) -> bool:
+        """
+        Returns True if the race date is more than six weeks old.
+        """
+        six_weeks_ago = datetime.now() - timedelta(weeks=6)
+        return self.race_date > six_weeks_ago
 
     @staticmethod
     def save_to_json(event: "Event", output_file: str):
