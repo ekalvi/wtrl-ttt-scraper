@@ -894,7 +894,7 @@
             "total_np": 1619,
             "team_name": "WKG Torture",
             "rider_count": 8,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 1891.498
         },
         {
@@ -1706,7 +1706,7 @@
             "total_np": 1550,
             "team_name": "Vikings Jormungandr",
             "rider_count": 8,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 1814.203
         },
         {
@@ -3108,7 +3108,7 @@
             "total_np": 1803,
             "team_name": "Vikings Mjolnir",
             "rider_count": 7,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2091.486
         },
         {
@@ -5134,7 +5134,7 @@
             "total_np": 1729,
             "team_name": "DIRTime Chasers Megas",
             "rider_count": 6,
-            "completed": 1,
+            "completed": 0,
             "total_time_calc": 2007.176
         },
         {
@@ -6070,7 +6070,7 @@
             "total_np": 1621,
             "team_name": "DIRTy Steam Engines",
             "rider_count": 8,
-            "completed": 1,
+            "completed": 0,
             "total_time_calc": 1898.25
         },
         {
@@ -6812,7 +6812,7 @@
             "total_np": 2037,
             "team_name": "Foudre Orval",
             "rider_count": 3,
-            "completed": 1,
+            "completed": 0,
             "total_time_calc": 2359.264
         },
         {
@@ -8462,7 +8462,7 @@
             "total_np": 1609,
             "team_name": "Team CLS B-52s",
             "rider_count": 6,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 1893.297
         },
         {
@@ -8580,7 +8580,7 @@
             "total_np": 1632,
             "team_name": "R&K Jaguars",
             "rider_count": 7,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 1927.279
         },
         {
@@ -8844,7 +8844,7 @@
             "total_np": 1548,
             "team_name": "CMC Express",
             "rider_count": 8,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 1831.222
         },
         {
@@ -9704,7 +9704,7 @@
             "total_np": 1668,
             "team_name": "DIRTy Rascals Rogue",
             "rider_count": 5,
-            "completed": 1,
+            "completed": 0,
             "total_time_calc": 1969.034
         },
         {
@@ -9842,7 +9842,7 @@
             "total_np": 2027,
             "team_name": "Berkshire Tri Squad",
             "rider_count": 2,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2347.502
         },
         {
@@ -10216,7 +10216,7 @@
             "total_np": 1804,
             "team_name": "Foudre Leffe",
             "rider_count": 2,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2109.789
         },
         {
@@ -11096,7 +11096,7 @@
             "total_np": 0,
             "team_name": "Merthyr CC",
             "rider_count": 1,
-            "completed": 1,
+            "completed": 0,
             "total_time_calc": null
         },
         {
@@ -14028,7 +14028,7 @@
             "total_np": 2228,
             "team_name": "On the Rivet NoProbaLlamas",
             "rider_count": 4,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2543.894
         },
         {
@@ -14410,7 +14410,7 @@
             "total_np": 1617,
             "team_name": "Atom Racing Team Atomic",
             "rider_count": 8,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 1897.68
         },
         {
@@ -14708,7 +14708,7 @@
             "total_np": 1727,
             "team_name": "Vikings Valgrind",
             "rider_count": 7,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2002.092
         },
         {
@@ -16010,7 +16010,7 @@
             "total_np": 2083,
             "team_name": "ATP JAVELIN",
             "rider_count": 7,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2380.387
         },
         {
@@ -21952,7 +21952,7 @@
             "total_np": 2314,
             "team_name": "On the Rivet Llamacorns",
             "rider_count": 6,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2655.22
         },
         {
@@ -22354,7 +22354,7 @@
             "total_np": 1552,
             "team_name": "ZU4R Addict",
             "rider_count": 8,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 1829.455
         },
         {
@@ -22888,7 +22888,7 @@
             "total_np": 1616,
             "team_name": "EVO BULLETS",
             "rider_count": 6,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 1888.48
         },
         {
@@ -23602,7 +23602,7 @@
             "total_np": 1842,
             "team_name": "Galaxy Storm Surge",
             "rider_count": 6,
-            "completed": 1,
+            "completed": 0,
             "total_time_calc": 2131.308
         },
         {
@@ -23706,7 +23706,7 @@
             "total_np": 1776,
             "team_name": "EVO HardCORE",
             "rider_count": 6,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2057.269
         },
         {
@@ -25564,7 +25564,7 @@
             "total_np": 0,
             "team_name": "WCC Free MozzrellaSticks",
             "rider_count": 1,
-            "completed": 1,
+            "completed": 0,
             "total_time_calc": null
         },
         {
@@ -27068,7 +27068,7 @@
             "total_np": 1785,
             "team_name": "SISU Racing Aamunkoi",
             "rider_count": 2,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2080.977
         },
         {
@@ -28346,7 +28346,7 @@
             "total_np": 2299,
             "team_name": "DIRTy Wattz Joules",
             "rider_count": 8,
-            "completed": 1,
+            "completed": 0,
             "total_time_calc": 2605.405
         },
         {
@@ -29054,7 +29054,7 @@
             "total_np": 1668,
             "team_name": "DIRTy Rascals Shapeshifters",
             "rider_count": 6,
-            "completed": 1,
+            "completed": 0,
             "total_time_calc": 1952.698
         },
         {
@@ -30546,7 +30546,7 @@
             "total_np": 1571,
             "team_name": "Riding DIRTy",
             "rider_count": 8,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 1832.827
         },
         {
@@ -30712,7 +30712,7 @@
             "total_np": 1973,
             "team_name": "Galaxy Supernova Velocity",
             "rider_count": 3,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2279.323
         },
         {
@@ -31746,7 +31746,7 @@
             "total_np": 1847,
             "team_name": "Ciclismo 2640",
             "rider_count": 2,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2160.181
         },
         {
@@ -31954,7 +31954,7 @@
             "total_np": 1756,
             "team_name": "ZRS Ecosse",
             "rider_count": 7,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2056.522
         },
         {
@@ -32412,7 +32412,7 @@
             "total_np": 2010,
             "team_name": "TugaZ Brigadeiro",
             "rider_count": 8,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2308.605
         },
         {
@@ -32634,7 +32634,7 @@
             "total_np": 1560,
             "team_name": "Talent:frei p/b Baldiso",
             "rider_count": 8,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 1826.092
         },
         {
@@ -33972,7 +33972,7 @@
             "total_np": 1980,
             "team_name": "ZRScot Thistles",
             "rider_count": 8,
-            "completed": 1,
+            "completed": 0,
             "total_time_calc": 2284.486
         },
         {
@@ -34554,7 +34554,7 @@
             "total_np": 2189,
             "team_name": "LEVEL WattsUPC",
             "rider_count": 3,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2515.62
         },
         {
@@ -34644,7 +34644,7 @@
             "total_np": 2469,
             "team_name": "LEVEL WattSunnySideUP",
             "rider_count": 5,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2824.27
         },
         {
@@ -36600,7 +36600,7 @@
             "total_np": 2103,
             "team_name": "Speedcore eSRT",
             "rider_count": 8,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2407.835
         },
         {
@@ -37772,7 +37772,7 @@
             "total_np": 1916,
             "team_name": "DIRTy Wattz Pioneers",
             "rider_count": 8,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2207.434
         },
         {
@@ -37980,7 +37980,7 @@
             "total_np": 1942,
             "team_name": "CrushPod Iced Mocha",
             "rider_count": 5,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2245.665
         },
         {
@@ -38756,7 +38756,7 @@
             "total_np": 2108,
             "team_name": "DIRTy Wattz Chaos",
             "rider_count": 6,
-            "completed": 1,
+            "completed": 0,
             "total_time_calc": 2433.075
         },
         {
@@ -38790,7 +38790,7 @@
             "total_np": 0,
             "team_name": "Team Drafting Heros",
             "rider_count": 1,
-            "completed": 1,
+            "completed": 0,
             "total_time_calc": null
         },
         {
@@ -38838,7 +38838,7 @@
             "total_np": 1788,
             "team_name": "Herd of rabbits",
             "rider_count": 2,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2071.395
         },
         {
@@ -38942,7 +38942,7 @@
             "total_np": 1812,
             "team_name": "DIRTy Mitten Hellcats",
             "rider_count": 6,
-            "completed": 1,
+            "completed": 0,
             "total_time_calc": 2108.654
         },
         {
@@ -39074,7 +39074,7 @@
             "total_np": 1584,
             "team_name": "DIRTy Mitten Aerostars",
             "rider_count": 8,
-            "completed": 1,
+            "completed": 0,
             "total_time_calc": 1851.963
         },
         {
@@ -39324,7 +39324,7 @@
             "total_np": 1579,
             "team_name": "Not Unknown eSRT",
             "rider_count": 7,
-            "completed": 1,
+            "completed": 0,
             "total_time_calc": 1856.387
         },
         {
@@ -40600,7 +40600,7 @@
             "total_np": 1808,
             "team_name": "4STAR DRACO",
             "rider_count": 5,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2092.297
         },
         {
@@ -40884,7 +40884,7 @@
             "total_np": 1856,
             "team_name": "Dinos Bellosaurus",
             "rider_count": 5,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2156.199
         },
         {
@@ -41396,7 +41396,7 @@
             "total_np": 2155,
             "team_name": "Eliel Factory Team Mocha",
             "rider_count": 3,
-            "completed": 1,
+            "completed": 0,
             "total_time_calc": 2457.904
         },
         {
@@ -41444,7 +41444,7 @@
             "total_np": 1796,
             "team_name": "Switch TTT",
             "rider_count": 2,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2104.09
         },
         {
@@ -41742,7 +41742,7 @@
             "total_np": 1632,
             "team_name": "EAT DIRT 9-9",
             "rider_count": 8,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 1922.573
         },
         {
@@ -42304,7 +42304,7 @@
             "total_np": 2123,
             "team_name": "DIRTy Wattz Flaco",
             "rider_count": 8,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2419.019
         },
         {
@@ -43462,7 +43462,7 @@
             "total_np": 1573,
             "team_name": "CC Donuts",
             "rider_count": 8,
-            "completed": 1,
+            "completed": 0,
             "total_time_calc": 1843.793
         },
         {
@@ -43538,7 +43538,7 @@
             "total_np": 2188,
             "team_name": "CC JellyBeans",
             "rider_count": 4,
-            "completed": 1,
+            "completed": 0,
             "total_time_calc": 2502.9
         },
         {
@@ -46080,7 +46080,7 @@
             "total_np": 2190,
             "team_name": "owl bike",
             "rider_count": 5,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2521.368
         },
         {
@@ -46344,7 +46344,7 @@
             "total_np": 2099,
             "team_name": "DIRTy Wattz Bossman",
             "rider_count": 8,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2403.453
         },
         {
@@ -46510,7 +46510,7 @@
             "total_np": 1979,
             "team_name": "TBR Superstars",
             "rider_count": 2,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2269.486
         },
         {
@@ -47244,7 +47244,7 @@
             "total_np": 2675,
             "team_name": "Hoot OWLS",
             "rider_count": 2,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 3043.752
         },
         {
@@ -49774,7 +49774,7 @@
             "total_np": 1783,
             "team_name": "RUL_5",
             "rider_count": 2,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2083.877
         },
         {
@@ -52006,7 +52006,7 @@
             "total_np": 2053,
             "team_name": "ZIRT 4",
             "rider_count": 7,
-            "completed": 1,
+            "completed": 0,
             "total_time_calc": 2359.668
         },
         {
@@ -52762,7 +52762,7 @@
             "total_np": 1724,
             "team_name": "BIEHLER SYNning Angels pb GoG",
             "rider_count": 5,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2010.872
         },
         {
@@ -53004,7 +53004,7 @@
             "total_np": 1796,
             "team_name": "Frenchy Fuzion B / C",
             "rider_count": 2,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2081.199
         },
         {
@@ -53696,7 +53696,7 @@
             "total_np": 1715,
             "team_name": "Bullet Train",
             "rider_count": 2,
-            "completed": 0,
+            "completed": 1,
             "total_time_calc": 2012.496
         },
         {
