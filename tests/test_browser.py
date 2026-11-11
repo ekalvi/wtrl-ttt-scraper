@@ -1,5 +1,9 @@
+import tempfile
 import unittest
+from types import SimpleNamespace
 from unittest.mock import Mock, patch
+
+from main import main_scraper_logic
 
 from wtrl_ttt_scraper.browser import BrowserSource
 
@@ -38,10 +42,38 @@ class BrowserTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "browser session"):
             self.source.is_authenticated()
 
-    def test_no_results(self):
+    def test_authenticated_without_latest_results(self):
         self.respond(text='{"loggedin":true,"success":false}')
-        with self.assertRaisesRegex(RuntimeError, "no successful results"):
-            self.source.is_authenticated()
+        self.assertTrue(self.source.is_authenticated())
+
+    def test_missing_latest_results_does_not_block_history(self):
+        self.source.latest = 2
+        unavailable = {"status": 200, "text": '{"loggedin":true,"success":false}'}
+        available = {"status": 200, "text": '{"loggedin":true,"success":true}'}
+        self.driver.execute_async_script.side_effect = [
+            unavailable,
+            unavailable,
+            available,
+        ]
+        event = SimpleNamespace(is_finalised=True, is_recent=False)
+        with tempfile.TemporaryDirectory() as directory, patch(
+            "main.latest_race", return_value=2
+        ), patch.object(self.source, "scrape_event", return_value=(event, True)), patch(
+            "wtrl_ttt_scraper.scrape.CACHE_DIR", directory
+        ), patch(
+            "wtrl_ttt_scraper.scrape.parse_wtrl_result", return_value=None
+        ) as parse, patch(
+            "wtrl_ttt_scraper.scrape.Result.save_to_json"
+        ), patch(
+            "builtins.print"
+        ):
+            main_scraper_logic(SimpleNamespace(clubs=[]), source=self.source)
+        parse.assert_called_once_with({"loggedin": True, "success": True})
+        urls = [
+            call.args[1] for call in self.driver.execute_async_script.call_args_list
+        ]
+        self.assertIn("season=2", urls[1])
+        self.assertIn("season=1", urls[2])
 
     def test_browser_error(self):
         self.driver.execute_async_script.return_value = {

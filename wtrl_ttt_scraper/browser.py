@@ -86,11 +86,9 @@ class BrowserSource:
 
     def is_authenticated(self):
         # A transport/session failure raises rather than triggering cookie extraction.
-        response = self.fetch_result(self.latest)
-        if not response.json().get("success"):
-            raise RuntimeError(
-                f"WTRL has no successful results response for race {self.latest}."
-            )
+        # Calendar-based latest race may not have results yet. fetch_result checks
+        # loggedin; scrape_result handles success=false as ResultsUnavailableError.
+        self.fetch_result(self.latest)
         return True
 
     def scrape_result(self, race, refresh_cache=False):

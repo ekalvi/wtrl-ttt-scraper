@@ -8,9 +8,10 @@ from main import load_config, main_scraper_logic
 from wtrl_ttt_scraper.browser import BrowserSource
 
 
-def main():
+def main(config=None):
     os.chdir(Path(__file__).resolve().parent)
-    config = load_config()
+    if config is None:
+        config = load_config()
     driver = webdriver.Chrome()
     try:
         driver.get("https://www.wtrl.racing/ttt-results/")

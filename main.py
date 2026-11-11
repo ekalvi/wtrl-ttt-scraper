@@ -164,4 +164,6 @@ def main_scraper_logic(config_: Config, source=default_source):
 if __name__ == "__main__":
     config = load_config()
     main_scraper_logic(config)
-    print("Local results generated. To publish explicitly: python publish.py --publish")
+    print(
+        "Local results generated. To publish these results: python publish.py --existing"
+    )

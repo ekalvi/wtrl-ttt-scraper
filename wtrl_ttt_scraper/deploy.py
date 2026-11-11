@@ -177,7 +177,7 @@ def deploy_all_sites(config, publish=False, publisher=None):
         )
     if not publish:
         print(
-            "Preflight passed. Nothing uploaded or published. Use --publish to proceed."
+            "Preflight passed. Nothing uploaded or published. Run publish.py to refresh and publish."
         )
         return []
 

@@ -113,6 +113,20 @@ WTRL-TTT-Scraper/
 
 ## **Usage**
 
+### Happy path: refresh and publish
+
+```bash
+.venv/bin/python publish.py
+```
+
+This checks Netlify access first, opens Chrome for you to log into WTRL, refreshes
+results, then publishes **all configured clubs**. Once the results page has loaded
+in the new Chrome window, press Enter in the terminal. No additional publish flag
+or second command is needed. Missing results for the newest race are skipped;
+completed historical results still generate dashboards.
+
+For a local-only refresh, use `.venv/bin/python run_browser.py` instead.
+
 ### **1. Run the Scraper**
 - Execute the main script to scrape data and generate results:
   ```bash
@@ -158,15 +172,20 @@ Synthetic tests (no login or network):
 ### **3. Publish Results**
 
 Scraping is local-only: neither `main.py` nor `run_browser.py` publishes anything.
-To publish the generated dashboards to **all configured Netlify sites**:
+The publish command refreshes and publishes **all configured Netlify sites**:
 
 ```bash
-# Read-only preflight: check output directories, token, and every site's access.
+# Happy path: check access, refresh via Chrome, then publish.
 .venv/bin/python publish.py
 
-# Explicitly upload and replace live dashboards for all configured clubs.
-.venv/bin/python publish.py --publish
+# Optional: read-only preflight of existing output; no browser or uploads.
+.venv/bin/python publish.py --check
+
+# Optional: publish already-generated results without refreshing.
+.venv/bin/python publish.py --existing
 ```
+
+The previous `--publish` flag remains an alias for `--existing`.
 
 Set `netlify_auth_token` and each club's `site_id` in the ignored
 `config.secret.json`. HTTP 401/403 means the token or site access needs attention;
@@ -177,7 +196,7 @@ rejects unexpected files, symlinks, duplicate site IDs, and a missing index.
 It preflights **every site before any upload**, uploads draft deploys using only
 Netlify's required hashes, waits for **all drafts** to be ready, then promotes
 each and verifies the site's live deploy ID. Draft URLs are externally accessible;
-`--publish` authorizes uploading them as well as replacing production.
+running `publish.py` (unless `--check` is used) uploads them and replaces production.
 
 Cross-site publication is not atomic. If a later promotion fails, already-published
 sites are reported and remain live. HTTP calls have timeouts, writes are never
@@ -185,8 +204,10 @@ automatically retried, and uncertain promotion outcomes are checked with a read.
 If a run stops, inspect the printed deploy IDs in Netlify before rerunning to
 avoid duplicate uploads. A rerun creates new drafts; it is not a resume command.
 
-Results reflect the last completed scrape, including any reported missing races;
-review the local dashboards before publishing. Existing historical cache files
+A failed or interrupted refresh does not proceed to publishing. Unavailable races
+are skipped and reported, so published history may omit races with no results yet.
+To review locally first, run `run_browser.py`, inspect the dashboards, then use
+`publish.py --existing`. Existing historical cache files
 remain tracked for compatibility, but new cache data, `.venv/`, results, and
 secret configuration are ignored and should never be force-added.
 
