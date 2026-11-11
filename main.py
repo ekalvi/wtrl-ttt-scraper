@@ -5,26 +5,22 @@ from config import Config
 from wtrl_ttt_scraper.calculate import calculate_percentile, latest_race
 from wtrl_ttt_scraper.format import slugify
 from wtrl_ttt_scraper.render import generate_index_html, render_results
-from wtrl_ttt_scraper.scrape import (
-    scrape_result,
-    is_authenticated,
-    scrape_event,
-    get_authentication_credentials,
-    AuthenticationError,
-)
-from wtrl_ttt_scraper.deploy import deploy_all_sites  # Import deploy logic
+from wtrl_ttt_scraper import scrape as default_source
+from wtrl_ttt_scraper.scrape import AuthenticationError, ResultsUnavailableError
 
 
 def load_config():
-    """Load configuration from `config.secret.json` if available, otherwise fallback to `config.json`."""
-    config_file = (
-        "config.secret.json" if os.path.exists("config.secret.json") else "config.json"
-    )
+    """Require local config so authentication never writes secrets into the template."""
+    config_file = "config.secret.json"
+    if not os.path.exists(config_file):
+        raise FileNotFoundError(
+            "Copy config.json to config.secret.json before running."
+        )
     print(f"\n📂 Loading configuration from: {config_file}")
     return Config.load(config_file)
 
 
-def main_scraper_logic(config_: Config):
+def main_scraper_logic(config_: Config, source=default_source):
     """Main scraping logic for all clubs and teams."""
     try:
         print("\n📊 Generating results for the following teams:\n")
@@ -39,11 +35,16 @@ def main_scraper_logic(config_: Config):
         raise KeyError(f"❌ Error: Missing key in configuration file: {e}")
 
     # Authenticate once for all clubs
-    if not is_authenticated():
+    if not source.is_authenticated():
         print("\n🔐 Authenticating with WTRL...")
-        credentials = get_authentication_credentials()
+        credentials = source.get_authentication_credentials()
         config_ = config_.save_credentials(credentials)
-        assert is_authenticated()
+        if not source.is_authenticated():
+            raise AuthenticationError(
+                "Browser login completed, but WTRL's API did not confirm the session. "
+                "The saved cookies or integrity token may not be accepted. "
+                "Do not share config.secret.json; it contains login credentials."
+            )
         print("✅ Authentication successful!\n")
 
     latest = latest_race()
@@ -58,13 +59,15 @@ def main_scraper_logic(config_: Config):
 
     for race in tqdm(range(latest, 0, -1), desc="⏳ Processing Races"):
         try:
-            event, cached_event = scrape_event(race, refresh_cache=False)
+            event, cached_event = source.scrape_event(race, refresh_cache=False)
             should_refresh = not event.is_finalised and event.is_recent
             if should_refresh and cached_event:
-                event, cached_event = scrape_event(race, refresh_cache=True)
-            result, cached_result = scrape_result(race, refresh_cache=should_refresh)
+                event, cached_event = source.scrape_event(race, refresh_cache=True)
+            result, cached_result = source.scrape_result(
+                race, refresh_cache=should_refresh
+            )
 
-        except AuthenticationError:
+        except ResultsUnavailableError:
             errors.append(race)
             continue
 
@@ -161,5 +164,4 @@ def main_scraper_logic(config_: Config):
 if __name__ == "__main__":
     config = load_config()
     main_scraper_logic(config)
-    # ✅ Deploy all sites after results are generated
-    deploy_all_sites(config)
+    print("Local results generated. To publish explicitly: python publish.py --publish")

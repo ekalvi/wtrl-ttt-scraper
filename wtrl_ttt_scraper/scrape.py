@@ -24,6 +24,10 @@ class AuthenticationError(Exception):
     pass
 
 
+class ResultsUnavailableError(Exception):
+    """Authenticated request succeeded, but this race has no results."""
+
+
 # Headers from the curl command
 def get_headers() -> dict:
     config = Config.get()
@@ -54,18 +58,25 @@ def get_headers() -> dict:
 
 def fetch_result(race_number: int) -> Response:
     url = url_template.format(season=race_number)
-    return requests.get(url, headers=get_headers())
+    return requests.get(url, headers=get_headers(), timeout=30)
 
 
 def is_authenticated(response: Response = None) -> bool:
-    if not response:
+    if response is None:
         response = fetch_result(1)
-    data = response.json()
-    return (
-        response.status_code == 200
-        and data.get("loggedin", False)
-        and data.get("success", False)
-    )
+    if response.status_code != 200:
+        raise RuntimeError(
+            f"WTRL returned HTTP {response.status_code}; this is not proof of a bad login. "
+            "If results load in Chrome, try run_browser.py."
+        )
+    try:
+        data = response.json()
+    except ValueError:
+        raise RuntimeError("WTRL returned non-JSON data; try run_browser.py.") from None
+    if not isinstance(data, dict):
+        raise RuntimeError("WTRL returned an unexpected response.")
+    # Race availability (success) is independent of session authentication.
+    return bool(data.get("loggedin", False))
 
 
 def get_authentication_credentials() -> dict:
@@ -111,7 +122,9 @@ def get_authentication_credentials() -> dict:
     return credentials
 
 
-def scrape_result(race_number: int, refresh_cache: bool = False) -> (Result, bool):
+def scrape_result(
+    race_number: int, refresh_cache: bool = False, fetcher=None
+) -> (Result, bool):
     """
     Reads the race data from a local file if it exists; otherwise, fetches it from the API.
 
@@ -134,8 +147,13 @@ def scrape_result(race_number: int, refresh_cache: bool = False) -> (Result, boo
         return result, True
 
     # If not, fetch from the API
-    response = fetch_result(race_number)
+    response = (fetcher or fetch_result)(race_number)
     if is_authenticated(response):
+        if not response.json().get("success", False):
+            raise ResultsUnavailableError(
+                f"Race {race_number} results unavailable; WTRL accepted the login "
+                "but returned success=false."
+            )
         result = parse_wtrl_result(response.json())
         Result.save_to_json(result, output_file)
         return result, False
@@ -146,18 +164,8 @@ def scrape_result(race_number: int, refresh_cache: bool = False) -> (Result, boo
         )
 
 
-def scrape_event(race_number: int, refresh_cache: bool = False) -> (Event, bool):
+def fetch_event(race_number: int) -> Response:
     config = Config.get()
-
-    # Directory to save the cache
-    os.makedirs(CACHE_DIR, exist_ok=True)
-
-    # File path for the cached HTML
-    output_file = os.path.join(CACHE_DIR, f"event_{race_number}.json")
-
-    # Check if the file exists locally
-    if not refresh_cache and os.path.exists(output_file):
-        return Event.load_from_json(output_file), True
 
     # Base URL and POST data
     url = "https://www.wtrl.racing/ttt/TTT-Results-beta.php"
@@ -184,9 +192,19 @@ def scrape_event(race_number: int, refresh_cache: bool = False) -> (Event, bool)
         "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36",
     }
 
+    return requests.post(url, headers=headers, data=data, timeout=30)
+
+
+def scrape_event(
+    race_number: int, refresh_cache: bool = False, fetcher=None
+) -> (Event, bool):
+    os.makedirs(CACHE_DIR, exist_ok=True)
+    output_file = os.path.join(CACHE_DIR, f"event_{race_number}.json")
+    if not refresh_cache and os.path.exists(output_file):
+        return Event.load_from_json(output_file), True
+
     try:
-        # Make the POST request
-        response = requests.post(url, headers=headers, data=data)
+        response = (fetcher or fetch_event)(race_number)
         response.raise_for_status()  # Raise exception for HTTP errors
         event = extract_event(response.text)
         Event.save_to_json(event, output_file)

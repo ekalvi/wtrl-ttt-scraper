@@ -3,3 +3,7 @@ results/
 __pycache__/
 .idea/
 .DS_Store
+.venv/
+# Historical tracked fixtures remain; never add newly scraped account data.
+cache/
+.pytest_cache/
